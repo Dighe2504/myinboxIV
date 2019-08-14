@@ -1,0 +1,30 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:u="sap.ui.unified">
+	<Dialog id="DLG_FORWARD" title="Forward" contentWidth="480px" contentHeight="440px"  beforeOpen="onBeforeOpenDialog" >
+		<subHeader>
+			<Bar>
+				<contentMiddle>
+					<SearchField id="SFD_FORWARD" showMagnifier="false" search="onAgentSearch"></SearchField>
+				</contentMiddle>
+			</Bar>
+		</subHeader>
+		<content>
+			<List id="LST_AGENTS" mode="SingleSelectMaster" items="{UserModel>/}" showNoData="false" noDataText="No Recipients" includeItemInSelection="true" growingScrollToLoad="true" >
+			
+					<StandardListItem id="ITM_AGENT"
+					title="{UserModel>NAME}"
+					info="{UserModel>BNAME}" 
+					description="{UserModel>EMAIL}"
+					iconDensityAware="false"
+					type="DetailAndActive"
+					></StandardListItem>
+					<!--cross.fnd.fiori.inbox.Conversions.formatterAgentName-->
+			</List>
+		</content>
+		<beginButton>
+			<Button  text="Forward" press="onSelectAgent" type="Default"/>
+		</beginButton>
+		<endButton>
+			<Button press="onCancelDialog" text="Cancel" type="Default"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

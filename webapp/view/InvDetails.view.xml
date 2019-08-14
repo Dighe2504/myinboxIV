@@ -1,0 +1,324 @@
+<mvc:View controllerName="com.ifx.approval.Z_MYIBX_INV.controller.InvDetails" xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout" displayBlock="true">
+	<!--Screen 1 header-->
+	<!--<ObjectHeader id="oh1" visible="{=${ADScreen>/isADList} ? true : false}" responsive="true" fullScreenOptimized="true"
+		title="{i18n>LBL1} {InvModel>/Xblnr}" titleActive="true" titlePress="handleTitlePress"
+		number="{parts:[{path:'InvModel>/Rmwwr'},{path:'InvModel>/Waers'}], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false}}"
+		numberUnit="{InvModel>/Waers}" titleSelectorPress="onPress" numberState="Success" backgroundDesign="Translucent">
+		<attributes>
+			<ObjectAttribute title="{i18n>PaymentTerms}" text="{InvModel>/Zterm}"/>
+			<ObjectAttribute title="{i18n>Vendor}" text="{InvModel>/Name1}"/>
+			
+		
+		</attributes>
+	<statuses>
+
+			<ObjectStatus title="{i18n>LBL8}" text="{path : 'InvModel>/Bldat' ,  type: 'sap.ui.model.type.Date', formatOptions: {source:{pattern:'yyyy-MM-dd' },style: 'short' }}" state="Success"/>
+		
+			<ObjectStatus title="{i18n>PoSAPNum}" text="{InvModel>/Belnr}" state="Success"/>
+		</statuses>
+	</ObjectHeader>-->
+	<!--<Text id="idText" text="Please click on Show Invoice to view the PDF"></Text>-->
+	<!--	{= !${device>/system/phone}? '22%' : '80%'} -->
+	<l:ResponsiveSplitter defaultPane="default" visible="{=${ADScreen>/isADList} ? true : false}">
+		<l:PaneContainer>
+			<l:SplitPane requiredParentWidth="500" id="default1">
+				<Text id="idText2" text="{i18n>showInvoice}"></Text>
+				<l:VerticalLayout width="100%" class="sapUiNoContentPadding">
+					<l:content>
+						<f:SimpleForm id="idComments" visible="{=${ADScreen>/isADList} ? true : false}" editable="false" layout="ResponsiveGridLayout"
+							title="Comments" labelSpanXL="4" labelSpanL="6" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="4"
+							emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false">
+							<f:content>
+								<Label text="{i18n>Notes}"/>
+								<Text text="{InvModel>/Notes}" wrapping="true"/>
+							</f:content>
+						</f:SimpleForm>
+						<Table id="adList" items="{InvModel>/NAVASS_PODET/results}" itemPress="onADDetailsPress" fixedLayout="false">
+							<columns>
+								<Column >
+									<Text text="{i18n>Name}"/>
+								</Column>
+								<Column demandPopin="true" minScreenWidth="Desktop">
+									<Text text="{i18n>Qty}"/>
+								</Column >
+								<Column demandPopin="true" hAlign="Center" minScreenWidth="Desktop">
+									<Text text="{i18n>Value}"/>
+								</Column>
+								<Column demandPopin="true" hAlign="Center" minScreenWidth="Desktop">
+									<Text text="{i18n>Price}"/>
+								</Column>
+								<Column demandPopin="true" hAlign="End" minScreenWidth="Desktop">
+									<Text text="{i18n>PoDetQty}"/>
+								</Column>
+								<Column hAlign="End">
+									<Text text="{i18n>Price2}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem vAlign="Middle" type="Navigation">
+									<cells>
+										<Text text="{InvModel>Ebeln}" wrapping="true"/>
+										<!--text="{= parseFloat(${InvPoModel>/NAVASS_INVPODET/results/0/Ebelp}) }-->
+										<Text text="{= parseFloat(${InvModel>Ebelp})}" wrapping="true"/>
+										<Text text="{InvModel>Sgtxt}" wrapping="true"/>
+										<Text text="{InvModel>Comp}" wrapping="true"/>
+										<ObjectNumber number="{InvModel>Menge}" unit="{InvModel>Bstme}"/>
+										<ObjectNumber
+											number="{ parts:[{path:'InvModel>Wrbtr'},{path:'InvModel&gt;Waers'}], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false} }"
+											unit="{InvModel>Waers}"/>
+										<!--<Text text="{InvModel>Ebeln}" wrapping="false"/>
+								<Text text="{InvModel>Ebelp}" wrapping="false"/>
+								<Text text="{InvModel>Sgtxt}"/>-->
+										<!--<ObjectIdentifier title="{InvModel>Sgtxt}"/>-->
+										<!--<Text text="{InvModel>Comp}" wrapping="true"/>-->
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</l:content>
+				</l:VerticalLayout>
+			</l:SplitPane>
+			<!--</l:PaneContainer>-->
+			<!--Code for PDF on Screen 1-->
+			<l:SplitPane id="SplitPane" requiredParentWidth="500">
+				<ScrollContainer id="idScrollContainer" height="600px" width="100%">
+					<!--	<html:iframe id="iFrame" height="600px" src="{InvModel>/InvImageUrl}"/>-->
+					<core:HTML id="iFrame"/>
+					<Text id="idText1" text="{i18n>showInvoice}"></Text>
+					<FlexBox id="idFlexBox" direction="Column" renderType="Div" class="sapUiSmallMargin">
+						
+						<PDFViewer id="idPDFViewer" source="{InvModel>/InvImageUrl}" height="600px" showDownloadButton="false" sourceValidationFailed="onSourceValidation">
+							<!--{InvModel>/InvImageUrl}-->
+							<!--<layoutData>
+								<FlexItemData growFactor="1"/>
+							</layoutData>-->
+						</PDFViewer>
+					</FlexBox>
+				</ScrollContainer>
+			</l:SplitPane>
+		</l:PaneContainer>
+	</l:ResponsiveSplitter>
+	<Toolbar>
+		<Button type="Back" visible="{=${ADScreen>/isADList} ? false : true}" press="onPress"/>
+		<ToolbarSpacer/>
+	</Toolbar>
+	<!--header Screen 2-->
+	<!--	<ObjectHeader id="adObjPg" visible="{=${ADScreen>/isADList} ? false : true}" responsive="true" fullScreenOptimized="false"
+		title="{i18n>popoverTitle} {InvPoModel>/NAVASS_INVPODET/results/0/Ebeln}" titleActive="true" titleSelectorPress="onPress"  
+		numberState="Success" backgroundDesign="Translucent">
+		<attributes wrapping="true">
+			<ObjectAttribute title="{i18n>PONum}" text="{InvPoModel>/NAVASS_INVPODET/results/0/Ebeln}"/>
+			<ObjectAttribute title="{i18n>Qty}" text="{InvPoModel>/NAVASS_INVPODET/results/0/Ebelp}"/>
+			<ObjectAttribute title="{i18n>Qty}" text="{= parseFloat(${InvPoModel>/NAVASS_INVPODET/results/0/Ebelp}) }"/>
+			<ObjectAttribute id="Desc" title="{i18n>Value}" text=""/>
+			<ObjectAttribute title="{i18n>Vendor}" text="{InvPoModel>/NAVASS_INVPODET/results/0/Name1}"/>
+		</attributes>
+		<statuses>
+			<ObjectStatus title="{i18n>PO_Date}"
+				text="{path : 'InvPoModel>/NAVASS_INVPODET/results/0/Bedat' , type: 'sap.ui.model.type.Date', formatOptions: {source:{pattern:'dd.MM.YYYY' },style: 'short' }}"/>
+		</statuses>
+	</ObjectHeader>-->
+	<f:SimpleForm id="adObjPg" editable="false" title="{i18n>popoverTitle} {InvPoModel>/NAVASS_INVPODET/results/0/Ebeln}"
+		singleContainerFullSize="false" layout="ResponsiveGridLayout" visible="{=${ADScreen>/isADList} ? false : true}">
+		<f:content>
+			<Label text="{i18n>PONum}" wrapping="true">
+				<!--<layoutData>
+                                                                                               <l:GridData span="L2 M2" />
+                                                                                               </layoutData>-->
+			</Label>
+			<Text text="{InvPoModel>/NAVASS_INVPODET/results/0/Ebeln}" wrapping="true">
+				<!--        <layoutData>
+                                                                                               <l:GridData span="L4 M4" />
+                                                                                               </layoutData>-->
+			</Text>
+			<Label text="{i18n>Qty}" wrapping="true">
+				<!--<layoutData>
+                                                                                               <l:GridData span="L2 M2" />
+                                                                                               </layoutData>-->
+			</Label>
+			<Text text="{= parseFloat(${InvPoModel>/NAVASS_INVPODET/results/0/Ebelp}) }" wrapping="true">
+				<!--<layoutData>
+                                                                                               <l:GridData span="L4 M4" />
+                                                                                               </layoutData>   -->
+			</Text>
+			<Label text="{i18n>Value}" wrapping="true">
+				<!--<layoutData>
+                                                                                               <l:GridData span="L2 M2" />
+                                                                                               </layoutData>-->
+			</Label>
+			<Text id="Desc" text="" wrapping="true">
+				<!--<layoutData>
+                                                                                               <l:GridData span="L4 M4" />
+                                                                                               </layoutData>-->
+			</Text>
+			<Label text="{i18n>Vendor}" wrapping="true">
+				<!--<layoutData>
+                                                                                               <l:GridData span="L2 M2" />
+                                                                                               </layoutData>-->
+			</Label>
+			<Text text="{InvPoModel>/NAVASS_INVPODET/results/0/Name1}" wrapping="true">
+				<!--<layoutData>
+                                                                                               <l:GridData span="L4 M4" />
+                                                                                               </layoutData>-->
+			</Text>
+			<Label text="{i18n>PO_Date}" wrapping="true">
+				<!--<layoutData>
+                                                                                               <l:GridData span="L2 M2" />
+                                                                                               </layoutData>-->
+			</Label>
+			<ObjectNumber
+				number="{path : 'InvPoModel>/NAVASS_INVPODET/results/0/Bedat' , type: 'sap.ui.model.type.Date', formatOptions: {source:{pattern:'dd.MM.YYYY' },style: 'short' }}">
+				<!--        <layoutData>
+                                                                                               <l:GridData span="L4 M4" />
+                                                                                               </layoutData>-->
+			</ObjectNumber>
+			<core:Title text="Open Quantity"/>
+			<Label text="Quantity"></Label>
+			<Text text="{InvPoModel>/NAVASS_INVPODET/results/0/MengeOpen}{InvPoModel>/NAVASS_INVPODET/results/0/MeinsOpen}" wrapping="true"></Text>
+			<Label text="Amount"></Label>
+			<Text text="{InvPoModel>/NAVASS_INVPODET/results/0/NetwrOpen}{InvPoModel>/NAVASS_INVPODET/results/0/WaersOpen}" wrapping="true"></Text>
+			<core:Title text="Parked Quantity"/>
+			<Label text="Quantity"></Label>
+			<Text text="{InvPoModel>/NAVASS_INVPODET/results/0/MengePar}{InvPoModel>/NAVASS_INVPODET/results/0/MeinsPar}" wrapping="true"></Text>
+			<Label text="Amount"></Label>
+			<Text text="{InvPoModel>/NAVASS_INVPODET/results/0/NetwrPar}{InvPoModel>/NAVASS_INVPODET/results/0/WaersPar}" wrapping="true"></Text>
+			<core:Title text="Invoiced Quantity"/>
+			<Label text="Quantity"></Label>
+			<Text text="{InvPoModel>/NAVASS_INVPODET/results/0/MengeInv}{InvPoModel>/NAVASS_INVPODET/results/0/MeinsInv}" wrapping="true"></Text>
+			<Label text="Amount"></Label>
+			<Text text="{InvPoModel>/NAVASS_INVPODET/results/0/NetwrInv}{InvPoModel>/NAVASS_INVPODET/results/0/WaersInv}" wrapping="true"></Text>
+			<!--<core:Title text="{InvPoModel>/NAVASS_INVPODET/results/0/Ebelp}"/>-->
+			<!--<Label text="Quantity"></Label>-->
+			<!--<Text text="{InvPoModel>/NAVASS_INVPODET/results/0/Menge}{InvPoModel>/NAVASS_INVPODET/results/0/Meins}" wrapping="true"></Text>-->
+			<!--<Label text="Amount"></Label>-->
+			<!--<Text text="{InvPoModel>/NAVASS_INVPODET/results/0/Netwr}{InvPoModel>/NAVASS_INVPODET/results/0/Waers}" wrapping="true"></Text>-->
+		</f:content>
+	</f:SimpleForm>
+	<!--<f:SimpleForm id="adObjPg" editable="false" title="{i18n>popoverTitle} {InvPoModel>/NAVASS_INVPODET/results/0/Ebeln}"-->
+	<!--singleContainerFullSize="false" layout="ResponsiveGridLayout" visible="{=${ADScreen>/isADList} ? false : true}">-->
+	<!--<f:content>-->
+	<!--</f:content>-->
+	<!--<f:SimpleForm>-->
+	<Panel visible="{=${ADScreen>/isADList} ? false : true}">
+		<Table id="InvList" items="{path: 'InvPoModel>/InvoiceLineSet/results', filter: [{path:'InvPoModel>Vgabe', operator: 'EQ', value1: '2'}]}"
+			visible="{=${ADScreen>/isADList} ? false : true}">
+			<!--<Table id="InvList" items="{path: 'oTableModel1>/data1/0/InvoiceLineSet/results'}"-->
+			<!--visible="{=${ADScreen>/isADList} ? false : true}">-->
+			<headerToolbar>
+				<Toolbar>
+					<content>
+						<Title text="{i18n>InvQty}" level="H2"/>
+						<ToolbarSpacer/>
+					</content>
+				</Toolbar>
+			</headerToolbar>
+			<columns>
+				<Column>
+					<Text text="{i18n>InvoiceNo}"/>
+				</Column>
+				<Column demandPopin="true" minScreenWidth="Desktop">
+					<Text text="{i18n>SAPNo}"/>
+				</Column>
+				<Column demandPopin="true" minScreenWidth="Desktop">
+					<Text text="{i18n>Date}"/>
+				</Column>
+				<Column demandPopin="true" minScreenWidth="Desktop">
+					<Text text="{i18n>Supplier}"/>
+				</Column>
+				<Column demandPopin="true" minScreenWidth="Desktop">
+					<Text text="{i18n>C.Code}"/>
+				</Column>
+				<Column demandPopin="true" minScreenWidth="Desktop">
+					<Text text="{i18n>PaymentTerms}"/>
+				</Column>
+				<Column demandPopin="true" minScreenWidth="Desktop">
+					<Text text="{i18n>Amount}"/>
+				</Column>
+				<Column >
+					<Text text=""/>
+				</Column>
+			</columns>
+			<items>
+				<ColumnListItem vAlign="Middle">
+					<cells>
+						<Text text="{InvPoModel>Xblnr}" wrapping="true"/>
+						<Text text="{InvPoModel>Belnr}" wrapping="true"/>
+						<!--<Text text="{InvPoModel>Gjahr}"/>-->
+						<Text text="{path: 'InvPoModel>Bldat',type: 'sap.ui.model.type.Date', formatOptions: {source:{pattern:'dd.MM.YYYY' },style: 'short' } }"/>
+						<Text text="{InvPoModel>Name1}" wrapping="true"/>
+						<Text text="{InvPoModel>Bukrs}" wrapping="true"/>
+						<Text text="{InvPoModel>Vtext}" wrapping="true"/>
+						<ObjectNumber
+							number="{ parts:[{path:'InvPoModel>Rmwwr'},{path:'InvPoModel>Waers'}], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false} }"
+							unit="{InvPoModel>Waers}"/>
+						<!--<Button icon = "sap-icon://pdf-reader" press= "onPdfClick"/>-->
+						<core:Icon src="sap-icon://pdf-reader" press="onPdfClick"></core:Icon>
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
+	</Panel>
+	<!--	//panel is made invisible to hide extra lines friday 15032019-->
+	<Panel visible="{=${ADScreen>/isADList} ? false : true}">
+		<Table id="ParList" items="{path: 'InvPoModel>/InvoiceLineSet/results',filter: [{path:'InvPoModel>Vgabe', operator: 'EQ', value1: 'P'}]}"
+			visible="{=${ADScreen>/isADList} ? false : true}">
+			<!--<Table id="ParList" items="{path: 'oTableModel2>/data2/0/InvoiceLineSet/results'}"
+			visible="{=${ADScreen>/isADList} ? false : true}">-->
+			<headerToolbar>
+				<Toolbar>
+					<content>
+						<Title text="{i18n>ParQty}" level="H2"/>
+						<ToolbarSpacer/>
+					</content>
+				</Toolbar>
+			</headerToolbar>
+			<columns>
+				<Column>
+					<Text text="{i18n>InvoiceNo}"/>
+				</Column>
+				<Column demandPopin="true" minScreenWidth="Desktop">
+					<Text text="{i18n>SAPNo}"/>
+				</Column>
+				<Column demandPopin="true" minScreenWidth="Desktop">
+					<Text text="{i18n>Date}"/>
+				</Column>
+				<Column demandPopin="true" minScreenWidth="Desktop">
+					<Text text="{i18n>Supplier}"/>
+				</Column>
+				<Column demandPopin="true" minScreenWidth="Desktop">
+					<Text text="{i18n>C.Code}"/>
+				</Column>
+				<Column demandPopin="true" minScreenWidth="Desktop">
+					<Text text="{i18n>PaymentTerms}"/>
+				</Column>
+				<Column demandPopin="true" minScreenWidth="Desktop">
+					<Text text="{i18n>Amount}"/>
+				</Column>
+				<Column>
+					<Text text=""/>
+				</Column>
+			</columns>
+			<items>
+				<ColumnListItem vAlign="Middle">
+					<cells>
+						<Text text="{InvPoModel>Xblnr}" wrapping="true"/>
+						<Text text="{InvPoModel>Belnr}" wrapping="true"/>
+						<!--<Text text="{InvPoModel>Gjahr}"/>-->
+						<!--<ObjectStatus title="{i18n>PO_Date}" text="{path : 'InvPoModel>/NAVASS_INVPODET/results/0/Bedat' ,  type: 'sap.ui.model.type.Date', formatOptions: {source:{pattern:'dd.MM.YYYY' },style: 'short' }}"/>-->
+						<!--<ObjectNumber number="{ parts:[{path:'InvModel>Wrbtr'},{path:'InvModel&gt;Waers'}], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false} }" unit="{InvModel>Waers}"/>-->
+						<Text text="{path: 'InvPoModel>Bldat',type: 'sap.ui.model.type.Date', formatOptions: {source:{pattern:'dd.MM.YYYY' },style: 'short' } }"/>
+						<Text text="{InvPoModel>Name1}" wrapping="true"/>
+						<Text text="{InvPoModel>Bukrs}" wrapping="true"/>
+						<Text text="{InvPoModel>Vtext}" wrapping="true"/>
+						<ObjectNumber
+							number="{ parts:[{path:'InvPoModel>Rmwwr'},{path:'InvPoModel>Waers'}], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false} }"
+							unit="{InvPoModel>Waers}"/>
+						<!--<Button icon = "sap-icon://pdf-reader" press= "onPdfClick"/>-->
+						<core:Icon src="sap-icon://pdf-reader" id="pdf" press="onPdfClick"></core:Icon>
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
+	</Panel>
+</mvc:View>
