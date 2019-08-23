@@ -758,12 +758,19 @@ sap.ui.define([
 			}
 
 			this.fnShowReleaseLoader(true);
+			//if else added on 22.08.19 by rutuja
+			if(sNote.length>0) {
+				
 			this.getOwnerComponent().getComponentData().inboxHandle.inboxDetailView.oDataManager.addComment(sSAPOrigin, sInstNo, sNote, jQuery.proxy(
 				function (data, response) {
 					that.updateAction(ActionObject, sSAPOrigin, sInstNo);
 				}, this), jQuery.proxy(function (oError) {
 				that.showError(oError);
 			}, this));
+			
+			}else{
+				that.updateAction(ActionObject, sSAPOrigin, sInstNo);
+			}
 
 		},
 
