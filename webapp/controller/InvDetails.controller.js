@@ -388,9 +388,7 @@ sap.ui.define([
 			this.bOutbox = oComponentData.inboxHandle.inboxDetailView.oDataManager.bOutbox;
 			// this will return a Boolean value with this flag the you can control the adding of the action button to the my inbox footer
 
-			//for Show Invoice Button
-
-			this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.addAction(oActionShowInvoice, fnHandleShowInvoice);
+		
 
 			// Action buttons are added only if “this.bOutbox” is false. 
 			if (!this.bOutbox) {
@@ -406,7 +404,13 @@ sap.ui.define([
 				this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.addAction(oActionReject, fnHandleReject);
 				this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.addAction(oActionForward, fnHandleForward);
 			}
+	//for Show Invoice Button
 
+			this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.addAction(oActionShowInvoice, fnHandleShowInvoice);
+				this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.reverseActionOrder(); 
+ 
+
+			
 			// ENDED BY DEEPTI
 			/*var sServiceUrl = "https://sapqpsa2.sap.infineon.com:8459/sap/opu/odata/sap/ZINVOICE_VERFICATION_SRV";
 			var oModel = new sap.ui.model.odata.oDataModel(sServiceUrl,true);
