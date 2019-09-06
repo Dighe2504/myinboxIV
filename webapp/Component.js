@@ -23,7 +23,9 @@ sap.ui.define([
 			// set the device model
 			this.setModel(models.createDeviceModel(), "device");
 		},
+		
 		createContent :function(){
+			sap.ui.core.BusyIndicator.show(); //by sahas
 			var oViewData = {component: this};
                     this.view = sap.ui.view({
                      type : sap.ui.core.mvc.ViewType.XML,

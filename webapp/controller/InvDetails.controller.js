@@ -34,6 +34,11 @@ sap.ui.define([
 			this.oConfirmationDialogManager.setI18nBundle(this.getOwnerComponent().getModel("i18n").getResourceBundle());
 			this.ConfirmationRejectDialog.setI18nBundle(this.getOwnerComponent().getModel("i18n").getResourceBundle());
 			this.i18nBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+		
+			// adding busy indicator sahas
+			/*sap.ui.core.BusyIndicator.show();*/
+			
+		
 			var getAcrobatInfo = function () {
 
 				var getBrowserName = function () {
@@ -132,7 +137,7 @@ sap.ui.define([
 
 				this.getView().byId("idPDFViewer").setVisible(false);
 
-					this.getView().byId("iFrame").setVisible(false);
+				this.getView().byId("iFrame").setVisible(false);
 
 				this.getView().byId("idFlexBox").setVisible(false);
 
@@ -150,7 +155,7 @@ sap.ui.define([
 				this.getView().byId("idPDFViewer").setShowDownloadButton(false);
 				this.getView().byId("idPDFViewer").setVisible(true);
 
-					this.getView().byId("iFrame").setVisible(false);
+				this.getView().byId("iFrame").setVisible(false);
 
 				this.getView().byId("idFlexBox").setVisible(true);
 
@@ -238,9 +243,18 @@ sap.ui.define([
 								// Handle no result
 
 							}
+							jQuery.sap.delayedCall(2000, this, function() {
+									sap.ui.core.BusyIndicator.hide();
+					
+				});
 						},
 
 						function (oError) {
+							
+								jQuery.sap.delayedCall(2000, this, function() { //by sahas
+									sap.ui.core.BusyIndicator.hide();
+								});
+					
 							that.showError(oError);
 						});
 
@@ -388,29 +402,26 @@ sap.ui.define([
 			this.bOutbox = oComponentData.inboxHandle.inboxDetailView.oDataManager.bOutbox;
 			// this will return a Boolean value with this flag the you can control the adding of the action button to the my inbox footer
 
-		
-
 			// Action buttons are added only if “this.bOutbox” is false. 
 			if (!this.bOutbox) {
 				// ADDED by Deepti
 
-				this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.removeAction(oActionSave.action);
+				this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.removeAction(oActionSave.action); //clarification
 				this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.removeAction(oActionAccept.action);
 				this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.removeAction(oActionReject.action);
 				this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.removeAction(oActionForward.action);
 				// end
-				this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.addAction(oActionSave, fnHandleSave);
+				
+				this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.addAction(oActionSave, fnHandleSave);       //clarification
 				this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.addAction(oActionAccept, fnHandleAccept);
 				this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.addAction(oActionReject, fnHandleReject);
 				this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.addAction(oActionForward, fnHandleForward);
 			}
-	//for Show Invoice Button
+			//for Show Invoice Button
 
 			this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.addAction(oActionShowInvoice, fnHandleShowInvoice);
-				this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.reverseActionOrder(); 
- 
+			this.getOwnerComponent().getComponentData().startupParameters.inboxAPI.reverseActionOrder(); //To show "Show Invoice" button next to Approve reject.
 
-			
 			// ENDED BY DEEPTI
 			/*var sServiceUrl = "https://sapqpsa2.sap.infineon.com:8459/sap/opu/odata/sap/ZINVOICE_VERFICATION_SRV";
 			var oModel = new sap.ui.model.odata.oDataModel(sServiceUrl,true);
@@ -763,16 +774,17 @@ sap.ui.define([
 
 			this.fnShowReleaseLoader(true);
 			//if else added on 22.08.19 by rutuja
-			if(sNote.length>0) {
-				
-			this.getOwnerComponent().getComponentData().inboxHandle.inboxDetailView.oDataManager.addComment(sSAPOrigin, sInstNo, sNote, jQuery.proxy(
-				function (data, response) {
-					that.updateAction(ActionObject, sSAPOrigin, sInstNo);
-				}, this), jQuery.proxy(function (oError) {
-				that.showError(oError);
-			}, this));
-			
-			}else{
+			if (sNote.length > 0) {
+
+				this.getOwnerComponent().getComponentData().inboxHandle.inboxDetailView.oDataManager.addComment(sSAPOrigin, sInstNo, sNote, jQuery
+					.proxy(
+						function (data, response) {
+							that.updateAction(ActionObject, sSAPOrigin, sInstNo);
+						}, this), jQuery.proxy(function (oError) {
+						that.showError(oError);
+					}, this));
+
+			} else {
 				that.updateAction(ActionObject, sSAPOrigin, sInstNo);
 			}
 
@@ -976,24 +988,118 @@ sap.ui.define([
 			//that.fnShowReleaseLoader(true);
 			var sSAPOrigin = this.oModel.getData().SAP__Origin;
 			var sInstNo = this.oModel.getData().InstanceID;
-			sap.m.MessageToast.show("Successfully Done");
-			this.getOwnerComponent().getComponentData().inboxHandle.inboxDetailView.oDataManager.doForward(sSAPOrigin, sInstNo, oNewResult.oAgentToBeForwarded,
+		//	sap.m.MessageToast.show("Successfully Done");
+			
+		
+			
+		/*	this.getOwnerComponent().getComponentData().inboxHandle.inboxDetailView.oDataManager.doForward(sSAPOrigin, sInstNo, oNewResult.oAgentToBeForwarded,
 				oNewResult.sNote, jQuery.proxy(function () {
 					sap.ca.ui.message.showMessageToast(this.i18nBundle.getText("dialog.success.forward", oNewResult.oAgentToBeForwarded));
 
 				}, this));
+				*/
+					
+			var oSelectedItem = this.dialog.mAggregations.content[0].getSelectedItem();
+			this.oSelectedAgent = oSelectedItem.mProperties.info;
+			var InvObject = this.getView().getModel("InvModel").getData();
+			var ActionObject = {};
 
-		}
-		,
+			ActionObject.SWW_WIID = sInstNo;
+			ActionObject.EMAIL = "";
+			ActionObject.BNAME = "";
+			ActionObject.NAME = "";
+			ActionObject.USER = "";
+			ActionObject.BUKRS = InvObject.Bukrs;
+			ActionObject.USER_ID = this.oSelectedAgent;
+			ActionObject.COMMENTS = oNewResult.sNote;
+			ActionObject.USER_RESPONSE = "FORWARD" ;
+			ActionObject.BELNR = InvObject.Belnr;
+			ActionObject.GJAHR = InvObject.Gjahr;
+			ActionObject.MESSAGE_TYPE = "";
+			ActionObject.MESAGE = "";
+
+		
+			this.postMethod(ActionObject, sSAPOrigin, sInstNo);
+
+			
+
+
+/*
+					"SWW_WIID" 
+					"BUKRS",
+					"USER_ID",
+					"COMMENTS",
+					"USER_RESPONSE"",
+					"BELNR",
+					"GJAHR", 
+					
+					
+					{
+  "d" : {
+
+        "SWW_WIID" : "123555",
+        "EMAIL" : "",
+        "BNAME" : "CAOF_MRP_1",
+        "NAME" : "",
+        "USER" : "",
+        "BUKRS" : "",
+        "USER_ID" : "",
+        "COMMENTS" : "",
+        "USER_RESPONSE" : "",
+        "BELNR" : "",
+        "GJAHR" : "",
+        "MESSAGE_TYPE" : "",
+        "MESAGE" : ""
+
+       }
+}
+
+
+					
+					
+				*/
+			
+		
+		
+		},
+
+		postMethod: function (ActionObject, sSAPOrigin, sInstNo) {
+			var that = this;
+
+			this.invModel.create(
+				'/ET_USER_DETAILSSet', //service
+				ActionObject,
+				null,
+				function (oData, oResponse) {
+
+				/*	if (oData.MSGTYPE == "E") {
+						sap.m.MessageBox.error(oData.MSG, {
+							onClose: function (oEvent) {
+								that.refreshTask(sSAPOrigin, sInstNo);
+							}
+						});
+					} else {*/
+						sap.m.MessageToast.show("Successfully Done");
+						that.refreshTask(sSAPOrigin, sInstNo);
+						//	window.scroll(0, 0);
+				/*	}*/
+
+					
+				},
+
+				function (oError) {
+					that.showError(oError);
+				});
+
+		},
 
 		onSourceValidation: function (oEvent) {
-			
-				oEvent.preventDefault();
+
+			oEvent.preventDefault();
 			//	oEvent.getSource().stopPropagation();
-			}
-		
-			
-			/*	onError : function(oEvent){
+		}
+
+		/*	onError : function(oEvent){
 			alert("in onError");
 			oEvent.getSource().preventDefault();
 		},
